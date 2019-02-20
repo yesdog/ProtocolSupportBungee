@@ -96,6 +96,6 @@ public class PERakNetMetrics implements RakNetServer.MetricsLogger {
     }
 
     public void measureBurstTokens(int n) {
-        burstTokens.observe(n);
+        burstTokens.observe(n * 0.001);
     }
 }
