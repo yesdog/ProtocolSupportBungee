@@ -43,19 +43,15 @@ dlDepsDirS.mkdirs()
 
 def dlDepsC = [
 	new Tuple(
-		'https://ci.md-5.net/job/BungeeCord/1356/artifact/bootstrap/target/BungeeCord.jar',
+		'https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/artifact/Waterfall-Proxy/bootstrap/target/Waterfall.jar',
 		'bungeecord-2.jar'
 	)
 ]
 
 def dlDepsS = [
 	new Tuple(
-		'https://build.true-games.org/job/RakNetServer/29/artifact/target/RakNetServer.jar',
-		'raknetserver-7.jar'
-	),
-	new Tuple(
-		'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar',
-		'udpserver-3.jar'
+		'https://github.com/yesdog/RakNetServer/releases/download/0.1/RakNetServer.jar',
+		'raknetserver-8.jar'
 	)
 ]
 
@@ -105,6 +101,9 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.2'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.1.1'
+    compile group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
+    compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
+    compile group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
 }
 
 task copyFinalJarToTarget(type: Copy) {

@@ -16,7 +16,7 @@ public class PEProxyServer {
 				.addLast(PECompressor.NAME, new PECompressor())
 				.addLast(PEDecompressor.NAME, new PEDecompressor())
 				.addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager());
-		}, 0xFE
+		}, 0xFE, PERakNetMetrics.INSTANCE
 	);
 
 	public void start() {
