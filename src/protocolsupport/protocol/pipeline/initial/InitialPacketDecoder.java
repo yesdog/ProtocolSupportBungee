@@ -215,7 +215,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				pipeline.addAfter(PipelineUtils.FRAME_DECODER, "decompress", new PacketDecompressor());
 				pipeline.addAfter(PipelineUtils.FRAME_PREPENDER, "compress", new PacketCompressor(256));
 			}
-			if ((encapsulatedinfo.getAddress() != null) && connection.getRawAddress().getAddress().isLoopbackAddress()) {
+			if ((encapsulatedinfo.getAddress() != null)) {
 				connection.changeAddress(encapsulatedinfo.getAddress());
 			}
 		}
