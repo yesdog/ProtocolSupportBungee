@@ -12,8 +12,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 
-import raknetserver.RakNetServer;
-
 public class PECompressor extends ChannelOutboundHandlerAdapter {
 
 	public static final String NAME = "peproxy-comp";
@@ -41,27 +39,29 @@ public class PECompressor extends ChannelOutboundHandlerAdapter {
 				buf.release();
 			}
 			if (stashBuffer.readableBytes() > MAX_POOL_BYTES) {
-				flushPacket(ctx);
+                flushData(ctx);
 			}
 			promise.trySuccess();
 			PERakNetMetrics.INSTANCE.outPrePacket.inc(1);
 			return;
 		}
-		if (msg instanceof RakNetServer.Tick) {
-			flushPacket(ctx);
-		}
 		super.write(ctx, msg, promise);
 	}
 
-	protected void flushPacket(ChannelHandlerContext ctx) {
-		if (stashBuffer.readableBytes() == 0) {
-			return;
+	@Override
+    public void flush(ChannelHandlerContext ctx) throws Exception {
+		if (stashBuffer.readableBytes() > 0) {
+            flushData(ctx);
 		}
-		PERakNetMetrics.INSTANCE.outPreComp.inc(stashBuffer.readableBytes());
-		final byte[] out = compressor.compress(MiscSerializer.readAllBytes(stashBuffer));
-		PERakNetMetrics.INSTANCE.outPostComp.inc(out.length);
-		ctx.write(Unpooled.wrappedBuffer(out)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
-		stashBuffer.clear();
+        super.flush(ctx);
 	}
+
+	void flushData(ChannelHandlerContext ctx) {
+        PERakNetMetrics.INSTANCE.outPreComp.inc(stashBuffer.readableBytes());
+        final byte[] out = compressor.compress(MiscSerializer.readAllBytes(stashBuffer));
+        PERakNetMetrics.INSTANCE.outPostComp.inc(out.length);
+        ctx.write(Unpooled.wrappedBuffer(out)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        stashBuffer.clear();
+    }
 
 }

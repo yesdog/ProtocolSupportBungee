@@ -30,17 +30,17 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 	}
 
 	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+	public void channelActive(ChannelHandlerContext ctx) {
 		ctx.writeAndFlush(handshakepacket).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
-		clientconnection.writeAndFlush(Unpooled.copiedBuffer(bytebuf)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) {
+		clientconnection.write(bytebuf.readRetainedSlice(bytebuf.readableBytes())).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		System.err.println("PE proxy server connection exception occurred");
 		cause.printStackTrace();
 		ctx.channel().close();

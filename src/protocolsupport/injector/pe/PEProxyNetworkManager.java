@@ -26,11 +26,12 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) {
-		ByteBuf cbytebuf = bytebuf.readRetainedSlice(bytebuf.readableBytes());
+		final ByteBuf cbytebuf = bytebuf.readRetainedSlice(bytebuf.readableBytes());
 		if (serverconnection == null) {
 			serverconnection = PEProxyServerConnection.connectToServer(ctx.channel(), cbytebuf);
 		} else {
-			serverconnection.eventLoop().execute(() -> serverconnection.writeAndFlush(cbytebuf).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
+			serverconnection.eventLoop().execute(() -> serverconnection.writeAndFlush(cbytebuf)
+                    .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
 		}
 	}
 
@@ -43,7 +44,8 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	protected void closeServerConnection() {
 		if (serverconnection != null) {
-			serverconnection.disconnect().addListeners(ChannelFutureListener.CLOSE, ChannelFutureListener.CLOSE_ON_FAILURE);
+			serverconnection.disconnect()
+                    .addListeners(ChannelFutureListener.CLOSE, ChannelFutureListener.CLOSE_ON_FAILURE);
 			serverconnection = null;
 		}
 	}
