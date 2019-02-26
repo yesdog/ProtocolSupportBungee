@@ -29,6 +29,7 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
 	public static final ProtocolVersion LATEST_PE = ProtocolVersion.getLatest(ProtocolType.PE);
+	public static final ProtocolVersion CURRENT_PE = ProtocolVersion.MINECRAFT_PE_1_9;
 
 	public static final ProtocolVersion[] ALL_PE = ProtocolVersion.getAllBetween(ProtocolVersion.getOldest(ProtocolType.PE), LATEST_PE);
 

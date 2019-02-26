@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.ReferenceCountUtil;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import protocolsupport.protocol.pipeline.common.EncapsulatedConnectionKeepAlive;
@@ -36,7 +37,8 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) {
-		clientconnection.write(bytebuf.readRetainedSlice(bytebuf.readableBytes())).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+		clientconnection.write(bytebuf.readRetainedSlice(bytebuf.readableBytes()))
+				.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 		.group(group)
 		.handler(new ChannelInitializer() {
 			@Override
-			protected void initChannel(Channel channel) throws Exception {
+			protected void initChannel(Channel channel) {
 				channel.pipeline()
 				.addLast("ps-encap-hs-sender", new EncapsulatedHandshakeSender(remote, true))
 				.addLast("keepalive", new EncapsulatedConnectionKeepAlive())

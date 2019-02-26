@@ -30,8 +30,8 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 		if (serverconnection == null) {
 			serverconnection = PEProxyServerConnection.connectToServer(ctx.channel(), cbytebuf);
 		} else {
-			serverconnection.eventLoop().execute(() -> serverconnection.writeAndFlush(cbytebuf)
-                    .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
+			serverconnection.writeAndFlush(cbytebuf)
+                    .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 		}
 	}
 
@@ -44,8 +44,7 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	protected void closeServerConnection() {
 		if (serverconnection != null) {
-			serverconnection.disconnect()
-                    .addListeners(ChannelFutureListener.CLOSE, ChannelFutureListener.CLOSE_ON_FAILURE);
+			serverconnection.disconnect().addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 			serverconnection = null;
 		}
 	}
@@ -58,7 +57,6 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-		//TODO: why is this sometimes fired but not channelInactive ? Only seems to happen on STATUS
 		closeServerConnection();
 		super.channelUnregistered(ctx);
 	}
