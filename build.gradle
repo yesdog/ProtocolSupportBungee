@@ -50,8 +50,8 @@ def dlDepsC = [
 
 def dlDepsS = [
 	new Tuple(
-		'https://github.com/yesdog/RakNetServer/releases/download/0.3/RakNetServer.jar',
-		'raknetserver-0.3.jar'
+		'https://github.com/yesdog/RakNetServer/releases/download/0.4/RakNetServer.jar',
+		'raknetserver-0.4.jar'
 	)
 ]
 

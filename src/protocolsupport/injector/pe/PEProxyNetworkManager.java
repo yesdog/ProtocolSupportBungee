@@ -35,13 +35,6 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 		}
 	}
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		BungeeCord.getInstance().getLogger().warning("PE proxy client connection exception occurred");
-		cause.printStackTrace();
-		ctx.channel().close();
-	}
-
 	protected void closeServerConnection() {
 		if (serverconnection != null) {
 			serverconnection.disconnect().addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
