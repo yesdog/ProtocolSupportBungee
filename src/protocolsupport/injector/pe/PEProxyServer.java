@@ -6,27 +6,35 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 
 import io.netty.channel.unix.UnixChannelOption;
+import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ListenerInfo;
 
 import raknetserver.RakNetServer;
-import raknetserver.packet.ConnectionFailed;
+import raknetserver.channel.RakNetChildChannel;
+import raknet.packet.ConnectionFailed;
 
 import java.nio.channels.ClosedChannelException;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PEProxyServer {
 
+    private final Logger logger;
     private final EventLoopGroup ioGroup = RakNetServer.DEFAULT_CHANNEL_EVENT_GROUP.get();
     private final EventLoopGroup childGroup = new DefaultEventLoopGroup();
     private final ChannelGroup channels = new DefaultChannelGroup(childGroup.next());
 
+    public PEProxyServer(Logger logger) {
+        this.logger = logger;
+    }
+
     private void newListener(ListenerInfo listenerInfo) {
         if (listenerInfo.isQueryEnabled() && listenerInfo.getQueryPort() == listenerInfo.getHost().getPort()) {
             throw new IllegalArgumentException(
-                    "[MCPE] Listener has query port enabled on the same port as " +
-                    "the server connection. PE port will handle queries just fine.");
+                    "[MCPE] Listener has query port enabled on the same port as the server " +
+                    "connection. Disable it, the PE port will handle queries just fine.");
         }
 
         final BungeeCord bungee = BungeeCord.getInstance();
@@ -34,7 +42,7 @@ public class PEProxyServer {
         .group(ioGroup, childGroup)
         .channelFactory(() -> new RakNetServer(RakNetServer.DEFAULT_CHANNEL_CLASS))
         .option(UnixChannelOption.SO_REUSEPORT, true)
-        .option(RakNetServer.SERVER_ID, UUID.randomUUID().getLeastSignificantBits())
+        .option(RakNetServer.SERVER_ID, UUID.randomUUID().getMostSignificantBits())
         .option(RakNetServer.METRICS, PERakNetMetrics.INSTANCE)
         .childOption(RakNetServer.USER_DATA_ID, 0xFE)
         .handler(new RakNetServer.DefaultIoInitializer(new ChannelInitializer() {
@@ -42,7 +50,7 @@ public class PEProxyServer {
                 channel.pipeline()
                         .addLast(new PEProxyServerInfoHandler(bungee, listenerInfo))
                         .addLast(new PEQueryHandler(bungee, listenerInfo))
-                        .addLast(new BungeeLogger(bungee, channel + " (PE UDP channel):", false));
+                        .addLast(new PluginLoggerInitializer());
             }
         }))
         .childHandler(new RakNetServer.DefaultChildInitializer(new ChannelInitializer() {
@@ -51,10 +59,13 @@ public class PEProxyServer {
                         .addLast(PECompressor.NAME, new PECompressor())
                         .addLast(PEDecompressor.NAME, new PEDecompressor())
                         .addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager())
-                        .addLast(new BungeeLogger(bungee, channel + " (PE child channel):", true));
+                        .addLast(new PluginLoggerInitializer());
             }
         }));
-        channels.add(bootstrap.bind(listenerInfo.getHost()).channel());
+        final Channel channel = bootstrap.bind(listenerInfo.getHost()).channel();
+        channel.closeFuture().addListener(v ->
+                logger.info("Server channel closed: " + channel));
+        channels.add(channel);
     }
 
     public void start() {
@@ -71,30 +82,38 @@ public class PEProxyServer {
         channels.close().syncUninterruptibly();
     }
 
-    private class BungeeLogger extends ChannelOutboundHandlerAdapter {
-        final BungeeCord bungee;
-        final String desc;
-        final boolean isChild;
-
-        private BungeeLogger(BungeeCord bungee, String desc, boolean isChild) {
-            this.bungee = bungee;
-            this.desc = desc;
-            this.isChild = isChild;
-        }
-
-        @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-            final Level level;
-            if (cause instanceof ClosedChannelException) {
-                level = Level.FINE;
-            } else {
-                level = Level.WARNING;
-            }
-            if (isChild && ctx.channel().isOpen()) {
-                ctx.writeAndFlush(new ConnectionFailed()).addListeners(
-                        ChannelFutureListener.CLOSE, ChannelFutureListener.CLOSE_ON_FAILURE);
-            }
-            bungee.getLogger().log(level, "Error handling packet on " + desc, cause);
+    private class PluginLoggerInitializer extends ChannelInitializer {
+        //TODO: make this better somehow. place last, and move it afterwards?
+        protected void initChannel(Channel channel) {
+            //delay so we know its entirely last
+            channel.eventLoop().execute(() ->
+                channel.pipeline().addLast(new ChannelOutboundHandlerAdapter() {
+                    @Override
+                    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                        final Level level;
+                        final String prefix;
+                        if (cause instanceof ReadTimeoutException) {
+                            prefix = "Read timeout on";
+                            level = Level.INFO;
+                        } else if (cause instanceof ClosedChannelException) {
+                            prefix = "Closed channel";
+                            level = Level.FINE;
+                        } else {
+                            prefix = "Pipeline error on";
+                            level = Level.WARNING;
+                        }
+                        if (channel instanceof RakNetChildChannel && channel.isOpen()) {
+                            channel.writeAndFlush(new ConnectionFailed()).addListeners(
+                                    ChannelFutureListener.CLOSE, ChannelFutureListener.CLOSE_ON_FAILURE);
+                        }
+                        if (level == Level.INFO) {
+                            logger.log(level, prefix + " " + channel);
+                        } else {
+                            logger.log(level, prefix + " " + channel, cause);
+                        }
+                    }
+                })
+            );
         }
     }
 

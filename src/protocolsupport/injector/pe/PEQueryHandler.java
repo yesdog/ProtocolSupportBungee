@@ -20,14 +20,15 @@ public class PEQueryHandler extends QueryHandler {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
-        final ByteBuf data = msg.content();
+    public boolean acceptInboundMessage(Object msg) throws Exception {
         //PE UDP channel gets some garbage sometimes, so lets filter it out here
-        if (data.readableBytes() >= 2
-                && data.getUnsignedByte(data.readerIndex()) == 0xFE
-                && data.getUnsignedByte(data.readerIndex() + 1) == 0xFD) {
-            super.channelRead0(ctx, msg);
+        if (super.acceptInboundMessage(msg)) {
+            final ByteBuf data = ((DatagramPacket) msg).content();
+            return data.readableBytes() >= 2
+                    && data.getUnsignedByte(data.readerIndex()) == 0xFE
+                    && data.getUnsignedByte(data.readerIndex() + 1) == 0xFD;
         }
+        return false;
     }
 
 }

@@ -27,7 +27,7 @@ public class ProtocolSupport extends Plugin {
 	public void onEnable() {
 		if (Utils.getJavaPropertyValue("enablepe", false, Boolean::parseBoolean)) {
 			getLogger().log(Level.INFO, "Enabling MCPE support");
-			(peserver = new PEProxyServer()).start();
+			(peserver = new PEProxyServer(getLogger())).start();
 		}
 	}
 
