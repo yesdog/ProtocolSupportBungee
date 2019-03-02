@@ -12,6 +12,8 @@ import net.md_5.bungee.api.config.ListenerInfo;
 
 import raknetserver.RakNetServer;
 import raknetserver.channel.RakNetChildChannel;
+
+import raknet.RakNet;
 import raknet.packet.ConnectionFailed;
 
 import java.nio.channels.ClosedChannelException;
@@ -42,9 +44,9 @@ public class PEProxyServer {
         .group(ioGroup, childGroup)
         .channelFactory(() -> new RakNetServer(RakNetServer.DEFAULT_CHANNEL_CLASS))
         .option(UnixChannelOption.SO_REUSEPORT, true)
-        .option(RakNetServer.SERVER_ID, UUID.randomUUID().getMostSignificantBits())
-        .option(RakNetServer.METRICS, PERakNetMetrics.INSTANCE)
-        .childOption(RakNetServer.USER_DATA_ID, 0xFE)
+        .option(RakNet.SERVER_ID, UUID.randomUUID().getMostSignificantBits())
+        .option(RakNet.METRICS, PERakNetMetrics.INSTANCE)
+        .childOption(RakNet.USER_DATA_ID, 0xFE)
         .handler(new RakNetServer.DefaultIoInitializer(new ChannelInitializer() {
             protected void initChannel(Channel channel) {
                 channel.pipeline()
@@ -63,12 +65,12 @@ public class PEProxyServer {
             }
         }));
         final Channel channel = bootstrap.bind(listenerInfo.getHost()).channel();
-        channel.closeFuture().addListener(v ->
-                logger.info("Server channel closed: " + channel));
+        channel.closeFuture().addListener(v -> logger.warning("Server channel closed: " + channel));
         channels.add(channel);
     }
 
     public void start() {
+        logger.info("Starting PE server, using " + RakNetServer.DEFAULT_CHANNEL_CLASS.getSimpleName());
         stop();
         try {
             BungeeCord.getInstance().getConfig().getListeners().forEach(this::newListener);

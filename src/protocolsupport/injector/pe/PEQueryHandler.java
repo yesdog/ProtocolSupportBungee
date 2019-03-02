@@ -1,17 +1,10 @@
 package protocolsupport.injector.pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
-import io.netty.handler.codec.MessageToByteEncoder;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.query.QueryHandler;
-
-import java.net.InetSocketAddress;
-import java.util.concurrent.TimeUnit;
 
 public class PEQueryHandler extends QueryHandler {
 

@@ -102,8 +102,8 @@ public class BungeeNettyChannelInjector extends Varint21LengthFieldPrepender {
 		}
 
 		@FunctionalInterface
-		public static interface PacketHandlerChangeListener {
-			public PacketHandler onPacketHandlerChange(PacketHandler handler);
+		public interface PacketHandlerChangeListener {
+			PacketHandler onPacketHandlerChange(PacketHandler handler);
 		}
 
 	}

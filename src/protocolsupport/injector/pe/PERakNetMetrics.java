@@ -6,13 +6,13 @@ import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
 
 import protocolsupport.utils.Utils;
-import raknetserver.RakNetServer;
+import raknet.RakNet;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class PERakNetMetrics implements RakNetServer.MetricsLogger {
-    private static double nsInS = 1.0 / TimeUnit.NANOSECONDS.convert(1, TimeUnit.SECONDS);
+public class PERakNetMetrics implements RakNet.MetricsLogger {
+    private static double sPerNs = 1.0 / TimeUnit.NANOSECONDS.convert(1, TimeUnit.SECONDS);
     static final PERakNetMetrics INSTANCE = new PERakNetMetrics();
 
     static {
@@ -21,7 +21,7 @@ public class PERakNetMetrics implements RakNetServer.MetricsLogger {
         try {
             new HTTPServer(port);
         } catch (IOException e) {
-            System.err.println("Failed to start HTTP Prometheus exporter!");
+            System.err.println("Failed to start HTTP Prometheus metrics exporter on port " + port);
             e.printStackTrace();
         }
     }
@@ -92,7 +92,7 @@ public class PERakNetMetrics implements RakNetServer.MetricsLogger {
     }
 
     public void measureRTTns(long l) {
-        rtt.observe(l * nsInS);
+        rtt.observe(l * sPerNs);
     }
 
     public void measureBurstTokens(int n) {
