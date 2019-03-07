@@ -10,6 +10,7 @@ import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ListenerInfo;
 
+import raknet.utils.DataSerializer;
 import raknetserver.RakNetServer;
 import raknetserver.channel.RakNetChildChannel;
 
@@ -87,7 +88,7 @@ public class PEProxyServer {
     private class PluginLoggerInitializer extends ChannelInitializer {
         //TODO: make this better somehow. place last, and move it afterwards?
         protected void initChannel(Channel channel) {
-            //delay so we know its entirely last
+            //delay so we know its last
             channel.eventLoop().execute(() ->
                 channel.pipeline().addLast(new ChannelOutboundHandlerAdapter() {
                     @Override
@@ -99,6 +100,9 @@ public class PEProxyServer {
                             level = Level.INFO;
                         } else if (cause instanceof ClosedChannelException) {
                             prefix = "Closed channel";
+                            level = Level.FINE;
+                        } else if (cause instanceof DataSerializer.MagicDecodeException) {
+                            prefix = "Bad RakNet magic";
                             level = Level.FINE;
                         } else {
                             prefix = "Pipeline error on";

@@ -50,8 +50,8 @@ def dlDepsC = [
 
 def dlDepsS = [
 	new Tuple(
-		'https://github.com/yesdog/RakNetServer/releases/download/0.4/RakNetServer.jar',
-		'raknetserver-0.4.jar'
+		'https://github.com/yesdog/RakNetServer/releases/download/0.5/RakNetServer.jar',
+		'raknetserver-0.5.jar'
 	)
 ]
 
@@ -134,8 +134,6 @@ shadowJar {
 	relocate 'org.objectweb', 'protocolsupport.libs.org.objectweb'
 	relocate 'net.minidev', 'protocolsupport.libs.net.minidev'
 	relocate 'net.jcip', 'protocolsupport.libs.net.jcip'
-	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
-	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 	relocate 'it.unimi.dsi.fastutil', 'protocolsupport.libs.it.unimi.dsi.fastutil'
 }
 

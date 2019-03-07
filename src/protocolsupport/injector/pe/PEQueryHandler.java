@@ -1,6 +1,7 @@
 package protocolsupport.injector.pe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
@@ -22,6 +23,11 @@ public class PEQueryHandler extends QueryHandler {
                     && data.getUnsignedByte(data.readerIndex() + 1) == 0xFD;
         }
         return false;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        ctx.fireExceptionCaught(cause);
     }
 
 }
