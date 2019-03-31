@@ -5,6 +5,7 @@ import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 
+import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.unix.UnixChannelOption;
 import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.BungeeCord;
@@ -16,6 +17,7 @@ import raknetserver.channel.RakNetChildChannel;
 
 import raknet.RakNet;
 import raknet.packet.ConnectionFailed;
+import raknetserver.channel.RakNetServerChannel;
 
 import java.nio.channels.ClosedChannelException;
 import java.util.UUID;
@@ -90,12 +92,23 @@ public class PEProxyServer {
         protected void initChannel(Channel channel) {
             //delay so we know its last
             channel.eventLoop().execute(() ->
-                channel.pipeline().addLast(new ChannelOutboundHandlerAdapter() {
+                channel.pipeline().addLast(new ChannelDuplexHandler() {
+                    @Override
+                    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+                        if (msg instanceof DatagramPacket && ctx.channel() instanceof RakNetServerChannel) {
+                            logger.log(Level.FINER, "Stray datagram sent to server channel handler");
+                        } else {
+                            ctx.fireChannelRead(msg);
+                        }
+                    }
+
                     @Override
                     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
                         final Level level;
                         final String prefix;
-                        if (cause instanceof ReadTimeoutException) {
+                        if (!ctx.channel().isActive()) {
+                            return;
+                        } else if (cause instanceof ReadTimeoutException) {
                             prefix = "Read timeout on";
                             level = Level.INFO;
                         } else if (cause instanceof ClosedChannelException) {
