@@ -63,6 +63,7 @@ public class PEProxyServer {
                 channel.pipeline()
                         .addLast(PECompressor.NAME, new PECompressor())
                         .addLast(PEDecompressor.NAME, new PEDecompressor())
+                        .addLast(PEDimSwitchLock.NAME, new PEDimSwitchLock())
                         .addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager())
                         .addLast(new PluginLoggerInitializer());
             }

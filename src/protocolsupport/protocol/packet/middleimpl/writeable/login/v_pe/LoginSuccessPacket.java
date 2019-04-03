@@ -7,13 +7,16 @@ import protocolsupport.protocol.packet.middleimpl.writeable.PESingleWriteablePac
 
 public class LoginSuccessPacket extends PESingleWriteablePacket<LoginSuccess> {
 
-	public LoginSuccessPacket() {
-		super(PEPacketId.Clientbound.PLAY_PLAY_STATUS);
-	}
+    public static final int LOGIN_SUCCESS = 0;
+    public static final int PLAYER_SPAWN = 3;
 
-	@Override
-	protected void write(ByteBuf data, LoginSuccess packet) {
-		data.writeInt(0);
-	}
+    public LoginSuccessPacket() {
+        super(PEPacketId.Clientbound.PLAY_PLAY_STATUS);
+    }
+
+    @Override
+    protected void write(ByteBuf data, LoginSuccess packet) {
+        data.writeInt(LOGIN_SUCCESS);
+    }
 
 }

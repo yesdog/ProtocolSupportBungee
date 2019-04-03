@@ -1,8 +1,5 @@
 package protocolsupport.protocol.pipeline.version.v_pe;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
-
 import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.packet.Chat;
 import net.md_5.bungee.protocol.packet.Kick;
@@ -24,11 +21,6 @@ import protocolsupport.protocol.packet.middleimpl.writeable.status.v_pe.StatusRe
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.ArrayList;
-
 public class ToClientPacketEncoder extends AbstractPacketEncoder {
 
 	{
@@ -45,37 +37,6 @@ public class ToClientPacketEncoder extends AbstractPacketEncoder {
 
 	public ToClientPacketEncoder(Connection connection, NetworkDataCache cache) {
 		super(connection, cache);
-	}
-
-	protected ArrayList<Pair<Object, ChannelPromise>> packetCache = new ArrayList<>(128);
-
-	@Override
-	public void write(final ChannelHandlerContext ctx, final Object msgObject, final ChannelPromise promise) throws Exception {
-		if (acceptOutboundMessage(msgObject)) {
-			DefinedPacket msg = (DefinedPacket) msgObject;
-			if (msg instanceof PluginMessage && cache.isStashingClientPackets() && ((PluginMessage) msg).getTag().equals("ps:bungeeunlock")) {
-				cache.setStashingClientPackets(false);
-				//copy list so we can safely recurse back into this method
-				ArrayList<Pair<Object, ChannelPromise>> packetCacheCopy = new ArrayList(packetCache);
-				packetCache.clear();
-				packetCache.trimToSize();
-				for (Pair<Object, ChannelPromise> cachedPacket : packetCacheCopy) {
-					write(ctx, cachedPacket.getLeft(), cachedPacket.getRight());
-				}
-				return;
-			}
-			// check if this is the bungee initiated chunk-cache-clearing dim switch
-			if (msg instanceof Respawn && !cache.isStashingClientPackets()) {
-				cache.setStashingClientPackets(true);
-				super.write(ctx, msgObject, promise);
-				return;
-			}
-		}
-		if (cache.isStashingClientPackets()) {
-			packetCache.add(new ImmutablePair(msgObject, promise));
-		} else {
-			super.write(ctx, msgObject, promise);
-		}
 	}
 
 }
