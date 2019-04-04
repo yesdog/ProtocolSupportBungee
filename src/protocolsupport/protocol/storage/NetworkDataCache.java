@@ -91,24 +91,14 @@ public class NetworkDataCache {
 		this.skinGeometry = skinGeometry;
 	}
 
-	private float x, y, z;
+	int loginDimension;
 
-	public float getX() {
-		return x;
+	public int getLoginDimension() {
+		return loginDimension;
 	}
 
-	public float getY() {
-		return y;
-	}
-
-	public float getZ() {
-		return z;
-	}
-
-	public void setSpawnLocation(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public void setLoginDimension(int loginDimension) {
+		this.loginDimension = loginDimension;
 	}
 
 }

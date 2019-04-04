@@ -35,31 +35,32 @@ public class RespawnPacket extends PESingleWriteablePacket<Respawn> {
 
     @Override
     public Collection<ByteBuf> toData(Respawn packet) {
-        ByteBuf single = super.toData(packet).iterator().next();
-        ArrayList<ByteBuf> packets = new ArrayList<>();
-        packets.add(single);
-        ByteBuf publisherUpdate = Unpooled.buffer();
-        PEPacketIdSerializer.writePacketId(publisherUpdate, PEPacketId.Clientbound.CHUNK_PUBLISHER_UPDATE_PACKET);
-        VarNumberSerializer.writeSVarInt(publisherUpdate, 0);
-        VarNumberSerializer.writeVarInt(publisherUpdate, 0);
-        VarNumberSerializer.writeSVarInt(publisherUpdate, 0);
-        VarNumberSerializer.writeVarInt(publisherUpdate, 10 * 16); //10 chunks.
-        packets.add(publisherUpdate);
-        for (int x = -2; x <= 2; x++) {
-            for (int z = -2; z <= 2; z++) {
-                ByteBuf buffer = Unpooled.buffer();
-                PEPacketIdSerializer.writePacketId(buffer, PEPacketId.Clientbound.PLAY_CHUNK_DATA);
-                VarNumberSerializer.writeSVarInt(buffer, x);
-                VarNumberSerializer.writeSVarInt(buffer, z);
-                buffer.writeBytes(getPEChunkData());
-                packets.add(buffer);
+        final ArrayList<ByteBuf> packets = new ArrayList<>();
+        packets.add(super.toData(packet).iterator().next());
+        if (packet.getDimension() != cache.getLoginDimension()) { //fake dim switch
+            ByteBuf publisherUpdate = Unpooled.buffer();
+            PEPacketIdSerializer.writePacketId(publisherUpdate, PEPacketId.Clientbound.CHUNK_PUBLISHER_UPDATE_PACKET);
+            VarNumberSerializer.writeSVarInt(publisherUpdate, 0);
+            VarNumberSerializer.writeVarInt(publisherUpdate, 0);
+            VarNumberSerializer.writeSVarInt(publisherUpdate, 0);
+            VarNumberSerializer.writeVarInt(publisherUpdate, 300); //10 chunks.
+            packets.add(publisherUpdate);
+            for (int x = -2; x <= 2; x++) {
+                for (int z = -2; z <= 2; z++) {
+                    ByteBuf buffer = Unpooled.buffer();
+                    PEPacketIdSerializer.writePacketId(buffer, PEPacketId.Clientbound.PLAY_CHUNK_DATA);
+                    VarNumberSerializer.writeSVarInt(buffer, x);
+                    VarNumberSerializer.writeSVarInt(buffer, z);
+                    buffer.writeBytes(getPEChunkData());
+                    packets.add(buffer);
+                }
             }
+            ByteBuf loginSuccess = Unpooled.buffer();
+            PEPacketIdSerializer.writePacketId(loginSuccess, PEPacketId.Clientbound.PLAY_PLAY_STATUS);
+            loginSuccess.writeInt(LoginSuccessPacket.PLAYER_SPAWN);
+            packets.add(loginSuccess);
+            packets.add(CustomEventPacket.create(PEDimSwitchLock.AWAIT_DIM_ACK_MESSAGE));
         }
-        ByteBuf loginSuccess = Unpooled.buffer();
-        PEPacketIdSerializer.writePacketId(loginSuccess, PEPacketId.Clientbound.PLAY_PLAY_STATUS);
-        loginSuccess.writeInt(LoginSuccessPacket.PLAYER_SPAWN);
-        packets.add(loginSuccess);
-        packets.add(CustomEventPacket.create(PEDimSwitchLock.AWAIT_DIM_ACK_MESSAGE));
         return packets;
     }
 

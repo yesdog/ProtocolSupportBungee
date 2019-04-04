@@ -42,8 +42,8 @@ public class LoginPacket extends PEDefinedReadableMiddlePacket {
 		VarNumberSerializer.readSVarInt(from); //world type (1 - infinite)
 		VarNumberSerializer.readSVarInt(from); // world gamemode (SURVIVAL)
 		difficulty = VarNumberSerializer.readSVarInt(from);
-		cache.setSpawnLocation(x, y, z);
 		cache.setStartGameData(MiscSerializer.readAllBytes(from)); //cary this stuff over
+		cache.setLoginDimension(dimension);
 	}
 
 	@Override
