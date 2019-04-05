@@ -1,7 +1,7 @@
 ProtocolSupportBungee
 ================
 
-[![Build Status](https://travis-ci.org/yesdog/ProtocolSupportBungee.svg?branch=master)](https://travis-ci.org/yesdog/ProtocolSupportBungee)
+[![Build Status](https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/badge/icon)](https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/)
 [![Known Vulnerabilities](https://snyk.io/test/github/yesdog/ProtocolSupportBungee/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/yesdog/ProtocolSupportBungee?targetFile=build.gradle)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/x935y8p)
 
