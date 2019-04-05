@@ -115,7 +115,6 @@
                     <target>${java.version}</target>
                     <compilerArgs>
                         <arg>-verbose</arg>
-                        <arg>-Werror</arg>
                         <arg>-Xlint:all,-options,-path</arg>
                     </compilerArgs>
                 </configuration>
