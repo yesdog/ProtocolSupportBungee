@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>protocolsupport</groupId>
     <artifactId>ProtocolSupportBungee</artifactId>
-    <version>0.13-SNAPSHOT</version>
+    <version>1.13-SNAPSHOT</version>
     <name>Yesdog ProtocolSupport Bungee</name>
     <url>https://github.com/yesdog/ProtocolSupportBungee</url>
     <packaging>jar</packaging>
@@ -115,6 +115,7 @@
                     <target>${java.version}</target>
                     <compilerArgs>
                         <arg>-verbose</arg>
+                        <arg>-Werror</arg>
                         <arg>-Xlint:all,-options,-path</arg>
                     </compilerArgs>
                 </configuration>
