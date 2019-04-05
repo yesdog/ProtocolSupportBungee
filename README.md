@@ -5,8 +5,7 @@ ProtocolSupportBungee
 [![Known Vulnerabilities](https://snyk.io/test/github/yesdog/ProtocolSupportBungee/badge.svg)](https://snyk.io/test/github/yesdog/ProtocolSupportBungee)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/x935y8p)
 
-Support for 1.6, 1.5, 1.4.7, pe clients on BungeeCord<br>
-This plugin is under development
+Support for PE clients on BungeeCord.
 
 Important notes:
 * Only latest version of this plugin is supported
