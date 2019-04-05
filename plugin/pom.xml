@@ -171,6 +171,10 @@
                                     <shadedPattern>protocolsupport.libs.net.minidev</shadedPattern>
                                 </relocation>
                                 <relocation>
+                                    <pattern>net.jcip</pattern>
+                                    <shadedPattern>protocolsupport.libs.net.jcip</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>network</pattern>
                                     <shadedPattern>protocolsupport.libs.network</shadedPattern>
                                 </relocation>
