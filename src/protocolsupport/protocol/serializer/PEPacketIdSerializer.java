@@ -12,7 +12,7 @@ public class PEPacketIdSerializer {
         VarNumberSerializer.writeVarInt(data, packetId);
     }
 
-    public static int peakPacketId(ByteBuf from) {
+    public static int peekPacketId(ByteBuf from) {
         try {
             return readPacketId(from.markReaderIndex());
         } finally {

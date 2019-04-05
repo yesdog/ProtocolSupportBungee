@@ -33,7 +33,7 @@ public class FromClientPlayerAction extends PEDefinedReadableMiddlePacket {
     }
 
     public static boolean isDimSwitchAck(ByteBuf data) {
-        if (PEPacketIdSerializer.peakPacketId(data) == PEPacketId.Serverbound.PLAY_PLAYER_ACTION) {
+        if (PEPacketIdSerializer.peekPacketId(data) == PEPacketId.Serverbound.PLAY_PLAYER_ACTION) {
             final ByteBuf copy = data.duplicate();
             PEPacketIdSerializer.readPacketId(copy);
             VarNumberSerializer.readVarLong(copy); // entity id

@@ -38,7 +38,7 @@ public class CustomEventPacket extends PEDefinedReadableMiddlePacket {
     }
 
     public static boolean isTag(ByteBuf data, String tag) {
-        if (PEPacketIdSerializer.peakPacketId(data) == PEPacketId.Dualbound.CUSTOM_EVENT) {
+        if (PEPacketIdSerializer.peekPacketId(data) == PEPacketId.Dualbound.CUSTOM_EVENT) {
             final ByteBuf copy = data.duplicate();
             PEPacketIdSerializer.readPacketId(copy);
             final String thisTag = StringSerializer.readVarIntUTF8String(copy);
