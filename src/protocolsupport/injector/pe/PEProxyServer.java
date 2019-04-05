@@ -11,13 +11,13 @@ import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ListenerInfo;
 
-import raknet.utils.DataSerializer;
-import raknetserver.RakNetServer;
-import raknetserver.channel.RakNetChildChannel;
+import network.ycc.raknet.utils.DataSerializer;
+import network.ycc.raknet.server.RakNetServer;
+import network.ycc.raknet.server.channel.RakNetChildChannel;
 
-import raknet.RakNet;
-import raknet.packet.ConnectionFailed;
-import raknetserver.channel.RakNetServerChannel;
+import network.ycc.raknet.RakNet;
+import network.ycc.raknet.packet.ConnectionFailed;
+import network.ycc.raknet.server.channel.RakNetServerChannel;
 
 import java.nio.channels.ClosedChannelException;
 import java.util.UUID;

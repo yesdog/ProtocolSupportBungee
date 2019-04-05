@@ -15,12 +15,12 @@ import net.md_5.bungee.api.event.ProxyPingEvent;
 
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-import raknetserver.channel.RakNetServerChannel;
-import raknetserver.pipeline.UdpPacketHandler;
+import network.ycc.raknet.server.channel.RakNetServerChannel;
+import network.ycc.raknet.server.pipeline.UdpPacketHandler;
 
-import raknet.packet.Packet;
-import raknet.packet.UnconnectedPing;
-import raknet.packet.UnconnectedPong;
+import network.ycc.raknet.packet.Packet;
+import network.ycc.raknet.packet.UnconnectedPing;
+import network.ycc.raknet.packet.UnconnectedPong;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;

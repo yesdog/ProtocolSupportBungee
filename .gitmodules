@@ -1,0 +1,3 @@
+[submodule "BungeeCord"]
+	path = BungeeCord
+	url = git@github.com:SpigotMC/BungeeCord.git
