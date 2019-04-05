@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>protocolsupport</groupId>
     <artifactId>ProtocolSupportBungee</artifactId>
-    <version>0.1</version>
+    <version>0.13-SNAPSHOT</version>
     <name>Yesdog ProtocolSupport Bungee</name>
     <url>https://github.com/yesdog/ProtocolSupportBungee</url>
     <packaging>jar</packaging>
@@ -84,6 +84,17 @@
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.org/repository/maven-snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.org/repository/maven-releases</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
