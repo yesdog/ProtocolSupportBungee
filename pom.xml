@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>protocolsupport</groupId>
     <artifactId>ProtocolSupportBungee</artifactId>
-    <version>1.13-SNAPSHOT</version>
+    <version>0.1</version>
     <name>Yesdog ProtocolSupport Bungee</name>
     <url>https://github.com/yesdog/ProtocolSupportBungee</url>
     <packaging>jar</packaging>
@@ -97,6 +97,7 @@
     </distributionManagement>
 
     <build>
+        <finalName>ProtocolSupportBungee</finalName>
         <defaultGoal>clean package</defaultGoal>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
         <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
