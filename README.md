@@ -2,7 +2,7 @@ ProtocolSupportBungee
 ================
 
 [![Build Status](https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/badge/icon)](https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/)
-[![Known Vulnerabilities](https://snyk.io/test/github/yesdog/ProtocolSupportBungee/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/yesdog/ProtocolSupportBungee?targetFile=build.gradle)
+[![Known Vulnerabilities](https://snyk.io/test/github/yesdog/ProtocolSupportBungee/badge.svg)](https://snyk.io/test/github/yesdog/ProtocolSupportBungee)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/x935y8p)
 
 Support for 1.6, 1.5, 1.4.7, pe clients on BungeeCord<br>
