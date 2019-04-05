@@ -27,3 +27,4 @@ out/
 *.iml
 /dllibsc/
 /dllibss/
+plugin/dependency-reduced-pom.xml
