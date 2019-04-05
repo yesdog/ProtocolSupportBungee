@@ -2,8 +2,8 @@ ProtocolSupportBungee
 ================
 
 [![Build Status](https://travis-ci.org/yesdog/ProtocolSupportBungee.svg?branch=master)](https://travis-ci.org/yesdog/ProtocolSupportBungee)
+[![Known Vulnerabilities](https://snyk.io/test/github/yesdog/ProtocolSupportBungee/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/yesdog/ProtocolSupportBungee?targetFile=build.gradle)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/x935y8p)
-<span class="badge-paypal"><a href="https://www.paypal.com/cgi-bin/webscr?return=&business=true-games.org%40yandex.ru&bn=PP-DonationsBF%3Abtn_donateCC_LG.gif%3ANonHosted&cmd=_donations&rm=1&no_shipping=1&currency_code=USD" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
 Support for 1.6, 1.5, 1.4.7, pe clients on BungeeCord<br>
 This plugin is under development
