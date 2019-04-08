@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>protocolsupport</groupId>
     <artifactId>ProtocolSupportBungee</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <name>Yesdog ProtocolSupport Bungee</name>
     <url>https://github.com/yesdog/ProtocolSupportBungee</url>
     <packaging>jar</packaging>
