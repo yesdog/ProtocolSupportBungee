@@ -26,7 +26,7 @@ The preferred setup is to put ProtocolSupport to all servers behind BungeeCord
 
 ---
 
-Jenkins: https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/
+Download builds here: https://ci.codemc.org/job/yesdog/job/ProtocolSupportBungee/
 
 ---
 
