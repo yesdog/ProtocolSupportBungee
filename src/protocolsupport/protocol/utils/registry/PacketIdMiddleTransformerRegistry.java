@@ -22,7 +22,7 @@ public class PacketIdMiddleTransformerRegistry<T> {
 	}
 
 	public T getTransformer(Protocol state, int packetId, boolean throwOnNull) throws InstantiationException, IllegalAccessException {
-		LazyNewInstance<T> transformer = registry[toKey(state, packetId)];
+		LazyNewInstance<T> transformer = packetId < 0 || packetId >= registry.length ? null : registry[toKey(state, packetId)];
 		if (transformer == null) {
 			if (throwOnNull) {
 				throw new NoSuchElementException("No transformer found for state " + state + " and packet id " + packetId);

@@ -34,7 +34,7 @@
         <dependency>
             <groupId>network.ycc</groupId>
             <artifactId>raknet</artifactId>
-            <version>0.5</version>
+            <version>0.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
@@ -96,8 +96,8 @@
     </distributionManagement>
 
     <build>
-        <finalName>ProtocolSupportBungee</finalName>
         <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.artifactId}</finalName>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
         <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
         <resources>

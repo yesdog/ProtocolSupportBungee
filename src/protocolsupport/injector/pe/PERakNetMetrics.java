@@ -1,6 +1,7 @@
 package protocolsupport.injector.pe;
 
 import io.prometheus.client.Counter;
+import io.prometheus.client.Gauge;
 import io.prometheus.client.Histogram;
 import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
@@ -39,13 +40,12 @@ public class PERakNetMetrics implements RakNet.MetricsLogger {
     final Counter nacksSent = Counter.build().name("nacksSent").help("nacksSent").register();
     final Histogram rtt = Histogram.build().name("rtt").help("RTT in seconds").register();
     final Histogram burstTokens = Histogram.build().name("burstTokens").help("Burst tokens").register();
+    final Gauge rttGauge = Gauge.build().name("rttGauge").help("RTT in seconds").register();
     final Counter outPrePacket = Counter.build().name("out_pre_comp_packet").help("Game packets sent (pre compression)").register();
     public final Counter outPreComp = Counter.build().name("out_pre_comp").help("Bytes out pre-compression").register();
     public final Counter outPostComp = Counter.build().name("out_post_comp").help("Bytes out post-compression").register();
 
-    private PERakNetMetrics() {
-
-    }
+    private PERakNetMetrics() {}
 
     public void packetsIn(int i) {
         packetsIn.inc(i);
@@ -97,5 +97,9 @@ public class PERakNetMetrics implements RakNet.MetricsLogger {
 
     public void measureBurstTokens(int n) {
         burstTokens.observe(n * 0.001);
+    }
+
+    public void measureRTTnsStdDev(long n) {
+        rttGauge.set(n * sPerNs);
     }
 }

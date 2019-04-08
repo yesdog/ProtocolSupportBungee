@@ -18,7 +18,7 @@ public abstract class EntityRewrite {
 		ByteBuf buf = packet.buf;
 		buf.markReaderIndex();
 		int packetId = readPacketId(buf);
-		EntityRewriteCommand[] chain = rewritechains[packetId];
+		EntityRewriteCommand[] chain = packetId < 0 || packetId >= rewritechains.length ? null : rewritechains[packetId];
 		if (chain == null) {
 			buf.resetReaderIndex();
 			return packet;

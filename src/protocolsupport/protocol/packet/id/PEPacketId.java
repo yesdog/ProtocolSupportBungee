@@ -36,6 +36,9 @@ public class PEPacketId {
 		public static final int MOVE_ENTITY_DELTA = 0x6F;
 		public static final int CHUNK_PUBLISHER_UPDATE_PACKET = 0x79;
 
+		//special extension packets
+		public static final int EXT_PS_AWAIT_DIM_SWITCH_ACK = -100;
+
 	}
 
 	public static class Dualbound {
