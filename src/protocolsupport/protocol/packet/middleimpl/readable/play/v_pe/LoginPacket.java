@@ -32,9 +32,9 @@ public class LoginPacket extends PEDefinedReadableMiddlePacket {
 		VarNumberSerializer.readSVarLong(from); //entity id (but it's actually signed varlong, so we use the field below, which is unsigned)
 		entityId = (int) VarNumberSerializer.readVarLong(from);
 		gamemode = (byte) VarNumberSerializer.readSVarInt(from);
-		float x = from.readFloatLE(); //x
-		float y = from.readFloatLE(); //y
-		float z = from.readFloatLE(); //z
+		from.readFloatLE(); //x
+		from.readFloatLE(); //y
+		from.readFloatLE(); //z
 		from.readFloatLE(); //yaw
 		from.readFloatLE(); //pitch
 		VarNumberSerializer.readSVarInt(from); //seed

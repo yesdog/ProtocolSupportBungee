@@ -19,7 +19,7 @@ public class EncapsulatedProtocolUtils {
 	public static EncapsulatedProtocolInfo readInfo(ByteBuf from) {
 		int encapVersion = VarNumberSerializer.readVarInt(from);
 		if (encapVersion > CURRENT_VERSION) {
-			throw new DecoderException(MessageFormat.format("Unsupported encapsulation protocol verrsion {}", encapVersion));
+			throw new DecoderException(MessageFormat.format("Unsupported encapsulation protocol version {}", encapVersion));
 		}
 		InetSocketAddress remoteaddress = null;
 		if (from.readBoolean()) {

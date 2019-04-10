@@ -8,6 +8,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.unix.UnixChannelOption;
 import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.util.ReferenceCountUtil;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ListenerInfo;
 
@@ -60,7 +61,7 @@ public class PEProxyServer {
         }))
         .childHandler(new RakNetServer.DefaultChildInitializer(new ChannelInitializer() {
             protected void initChannel(Channel channel) {
-                channel.pipeline()
+                channel.pipeline() //TODO: add read timeout here, not raknet
                         .addLast(PECompressor.NAME, new PECompressor())
                         .addLast(PEDecompressor.NAME, new PEDecompressor())
                         .addLast(PEDimSwitchLock.NAME, new PEDimSwitchLock())
@@ -98,6 +99,7 @@ public class PEProxyServer {
                     public void channelRead(ChannelHandlerContext ctx, Object msg) {
                         if (msg instanceof DatagramPacket && ctx.channel() instanceof RakNetServerChannel) {
                             logger.log(Level.FINER, "Stray datagram sent to server channel handler");
+                            ReferenceCountUtil.safeRelease(msg);
                         } else {
                             ctx.fireChannelRead(msg);
                         }
