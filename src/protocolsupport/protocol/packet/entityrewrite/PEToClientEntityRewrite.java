@@ -38,6 +38,12 @@ public class PEToClientEntityRewrite extends PEEntityRewrite {
 			EntityRewriteCommand.VARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND,
 			EntityRewriteCommand.REMAINING_BYTES_COPY_ENTITY_REWRITE_COMMAND
 		);
+		//TODO: meta content remap
+		register(
+			PEPacketId.Clientbound.PLAY_ENTITY_METADATA,
+			EntityRewriteCommand.VARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND,
+			EntityRewriteCommand.REMAINING_BYTES_COPY_ENTITY_REWRITE_COMMAND
+		);
 		register(
 			PEPacketId.Clientbound.PLAY_ENTITY_DESTROY,
 			EntityRewriteCommand.SVARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND
@@ -68,12 +74,6 @@ public class PEToClientEntityRewrite extends PEEntityRewrite {
 			EntityRewriteCommand.VARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND,
 			new EntityRewriteCommand.FixedLengthBytesCopyEntityRewriteCommand((Float.BYTES * 6) + (Byte.BYTES * 2)),
 			EntityRewriteCommand.VARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND
-		);
-		//TODO: meta content remap
-		register(
-			PEPacketId.Clientbound.PLAY_ENTITY_METADATA,
-			EntityRewriteCommand.VARLONG_ENTITY_ID_ENTITY_REWRITE_COMMAND,
-			EntityRewriteCommand.REMAINING_BYTES_COPY_ENTITY_REWRITE_COMMAND
 		);
 		//TODO: meta content remap
 		register(

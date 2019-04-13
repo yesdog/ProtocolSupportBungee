@@ -52,15 +52,15 @@ public class PEProxyServer {
         .option(RakNet.SERVER_ID, UUID.randomUUID().getMostSignificantBits())
         .option(RakNet.METRICS, PERakNetMetrics.INSTANCE)
         .childOption(RakNet.USER_DATA_ID, 0xFE)
-        .handler(new RakNetServer.DefaultIoInitializer(new ChannelInitializer() {
+        .handler(new ChannelInitializer() {
             protected void initChannel(Channel channel) {
                 channel.pipeline()
                         .addLast(new PEProxyServerInfoHandler(bungee, listenerInfo))
                         .addLast(new PEQueryHandler(bungee, listenerInfo))
                         .addLast(new PluginLoggerInitializer());
             }
-        }))
-        .childHandler(new RakNetServer.DefaultChildInitializer(new ChannelInitializer() {
+        })
+        .childHandler(new ChannelInitializer() {
             protected void initChannel(Channel channel) {
                 channel.pipeline()
                         .addLast("rn-timeout", new ReadTimeoutHandler(5))
@@ -70,7 +70,7 @@ public class PEProxyServer {
                         .addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager())
                         .addLast(new PluginLoggerInitializer());
             }
-        }));
+        });
         final Channel channel = bootstrap.bind(listenerInfo.getHost()).channel();
         channel.closeFuture().addListener(v -> logger.warning("Server channel closed: " + channel));
         channels.add(channel);
