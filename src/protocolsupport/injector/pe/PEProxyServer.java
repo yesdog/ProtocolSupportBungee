@@ -62,12 +62,15 @@ public class PEProxyServer {
         .childHandler(new ChannelInitializer() {
             protected void initChannel(Channel channel) {
                 channel.pipeline()
-                        .addLast("rn-timeout", new ReadTimeoutHandler(5))
                         .addLast(PECompressor.NAME, new PECompressor())
                         .addLast(PEDecompressor.NAME, new PEDecompressor())
                         .addLast(PEDimSwitchLock.NAME, new PEDimSwitchLock())
                         .addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager())
                         .addLast(new PluginLoggerInitializer());
+
+                channel.eventLoop().execute(() -> {
+                    channel.pipeline().addFirst(new ReadTimeoutHandler(5));
+                });
             }
         });
         final Channel channel = bootstrap.bind(listenerInfo.getHost()).channel();
