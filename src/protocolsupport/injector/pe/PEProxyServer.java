@@ -46,7 +46,7 @@ public class PEProxyServer {
         final BungeeCord bungee = BungeeCord.getInstance();
         final ServerBootstrap bootstrap = new ServerBootstrap()
         .group(ioGroup, childGroup)
-        .channelFactory(() -> new RakNetServer(RakNetServer.DEFAULT_CHANNEL_CLASS))
+        .channelFactory(() -> new RakNetServerChannel(RakNetServer.DEFAULT_CHANNEL_CLASS))
         .option(UnixChannelOption.SO_REUSEPORT, true)
         .option(RakNet.SERVER_ID, UUID.randomUUID().getMostSignificantBits())
         .option(RakNet.METRICS, PERakNetMetrics.INSTANCE)
