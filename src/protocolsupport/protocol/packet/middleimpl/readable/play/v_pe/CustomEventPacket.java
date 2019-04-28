@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.readable.PEDefinedReadableMidd
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PEPacketIdSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +28,11 @@ public class CustomEventPacket extends PEDefinedReadableMiddlePacket {
     @Override
     protected void read0(ByteBuf from) {
         tag = StringSerializer.readVarIntUTF8String(from);
-        data = MiscSerializer.readAllBytes(from);
+        if (from.isReadable()) {
+            data = MiscSerializer.readAllBytes(from.readSlice(VarNumberSerializer.readVarInt(from)));
+        } else {
+            data = new byte[0];
+        }
     }
 
     @Override

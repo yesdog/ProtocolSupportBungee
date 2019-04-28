@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.id.PEPacketId;
 import protocolsupport.protocol.packet.middleimpl.writeable.PESingleWriteablePacket;
 import protocolsupport.protocol.serializer.PEPacketIdSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class CustomEventPacket extends PESingleWriteablePacket<PluginMessage> {
 
@@ -23,6 +24,7 @@ public class CustomEventPacket extends PESingleWriteablePacket<PluginMessage> {
 
     static void write(ByteBuf buf, String tag, byte[] data) {
         StringSerializer.writeVarIntUTF8String(buf, tag);
+        VarNumberSerializer.writeVarInt(buf, data.length);
         buf.writeBytes(data);
     }
 
